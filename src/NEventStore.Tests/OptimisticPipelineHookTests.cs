@@ -10,24 +10,24 @@ namespace NEventStore
     using NEventStore.Persistence;
     using NEventStore.Persistence.AcceptanceTests;
     using NEventStore.Persistence.AcceptanceTests.BDD;
-	using FluentAssertions;
+    using FluentAssertions;
 #if MSTEST
 	using Microsoft.VisualStudio.TestTools.UnitTesting;	
 #endif
 #if NUNIT
-	using NUnit.Framework;	
+    using NUnit.Framework;
 #endif
 #if XUNIT
 	using Xunit;
 	using Xunit.Should;
 #endif
 
-	public class OptimisticPipelineHookTests
+    public class OptimisticPipelineHookTests
     {
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_sequence_beyond_the_known_end_of_a_stream : using_commit_hooks
+        public class when_committing_with_a_sequence_beyond_the_known_end_of_a_stream : using_commit_hooks
         {
             private const int HeadStreamRevision = 5;
             private const int HeadCommitSequence = 1;
@@ -60,7 +60,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_revision_beyond_the_known_end_of_a_stream : using_commit_hooks
+        public class when_committing_with_a_revision_beyond_the_known_end_of_a_stream : using_commit_hooks
         {
             private const int HeadCommitSequence = 1;
             private const int HeadStreamRevision = 1;
@@ -94,7 +94,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_sequence_less_or_equal_to_the_most_recent_sequence_for_the_stream : using_commit_hooks
+        public class when_committing_with_a_sequence_less_or_equal_to_the_most_recent_sequence_for_the_stream : using_commit_hooks
         {
             private const int HeadStreamRevision = 42;
             private const int HeadCommitSequence = 42;
@@ -135,7 +135,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_revision_less_or_equal_to_than_the_most_recent_revision_read_for_the_stream : using_commit_hooks
+        public class when_committing_with_a_revision_less_or_equal_to_than_the_most_recent_revision_read_for_the_stream : using_commit_hooks
         {
             private const int HeadStreamRevision = 3;
             private const int HeadCommitSequence = 2;
@@ -174,7 +174,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_commit_sequence_less_than_or_equal_to_the_most_recent_commit_for_the_stream : using_commit_hooks
+        public class when_committing_with_a_commit_sequence_less_than_or_equal_to_the_most_recent_commit_for_the_stream : using_commit_hooks
         {
             private const int DuplicateCommitSequence = 1;
             private CommitAttempt _failedAttempt;
@@ -211,7 +211,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_committing_with_a_stream_revision_less_than_or_equal_to_the_most_recent_commit_for_the_stream : using_commit_hooks
+        public class when_committing_with_a_stream_revision_less_than_or_equal_to_the_most_recent_commit_for_the_stream : using_commit_hooks
         {
             private const int DuplicateStreamRevision = 2;
 
@@ -309,7 +309,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_purging : SpecificationBase
+        public class when_purging : SpecificationBase
         {
             private ICommit _trackedCommit;
             private OptimisticPipelineHook _hook;
@@ -342,7 +342,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_purging_a_bucket : SpecificationBase
+        public class when_purging_a_bucket : SpecificationBase
         {
             private ICommit _trackedCommitBucket1;
             private ICommit _trackedCommitBucket2;
@@ -384,7 +384,7 @@ namespace NEventStore
 #if MSTEST
 		[TestClass]
 #endif
-		public class when_deleting_a_stream : SpecificationBase
+        public class when_deleting_a_stream : SpecificationBase
         {
             private ICommit _trackedCommit;
             private ICommit _trackedCommitDeleted;
@@ -437,19 +437,19 @@ namespace NEventStore
 
             protected ICommit BuildCommitStub(int streamRevision, int commitSequence)
             {
-                List<EventMessage> events = new[] {new EventMessage()}.ToList();
+                List<EventMessage> events = new[] { new EventMessage() }.ToList();
                 return new Commit(Bucket.Default, _streamId, streamRevision, Guid.NewGuid(), commitSequence, SystemTime.UtcNow, 0, null, events);
             }
 
             protected CommitAttempt BuildCommitAttemptStub(int streamRevision, int commitSequence)
             {
-                List<EventMessage> events = new[] {new EventMessage()}.ToList();
+                var events = new[] { new EventMessage() };
                 return new CommitAttempt(Bucket.Default, _streamId, streamRevision, Guid.NewGuid(), commitSequence, SystemTime.UtcNow, null, events);
             }
 
             protected ICommit BuildCommitStub(Guid commitId, int streamRevision, int commitSequence)
             {
-                List<EventMessage> events = new[] {new EventMessage()}.ToList();
+                List<EventMessage> events = new[] { new EventMessage() }.ToList();
                 return new Commit(Bucket.Default, _streamId, streamRevision, commitId, commitSequence, SystemTime.UtcNow, 0, null, events);
             }
         }

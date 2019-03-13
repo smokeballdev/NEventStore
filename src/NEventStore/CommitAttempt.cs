@@ -7,14 +7,16 @@ namespace NEventStore
 
     public class CommitAttempt
     {
+        private readonly static ReadOnlyCollection<EventMessage> EmptyReadOnlyCollection = new ReadOnlyCollection<EventMessage>(new List<EventMessage>());
+
         private readonly string _bucketId;
         private readonly string _streamId;
         private readonly int _streamRevision;
         private readonly Guid _commitId;
         private readonly int _commitSequence;
         private readonly DateTime _commitStamp;
-        private readonly IDictionary<string, object> _headers;
-        private readonly ICollection<EventMessage> _events;
+        private readonly Dictionary<string, object> _headers;
+        private readonly EventMessage[] _events;
 
         /// <summary>
         ///     Initializes a new instance of the Commit class for the default bucket.
@@ -32,8 +34,8 @@ namespace NEventStore
             Guid commitId,
             int commitSequence,
             DateTime commitStamp,
-            IDictionary<string, object> headers,
-            IEnumerable<EventMessage> events)
+            Dictionary<string, object> headers,
+            EventMessage[] events)
             : this(Bucket.Default, streamId.ToString(), streamRevision, commitId, commitSequence, commitStamp, headers, events)
         { }
 
@@ -53,10 +55,10 @@ namespace NEventStore
             Guid commitId,
             int commitSequence,
             DateTime commitStamp,
-            IDictionary<string, object> headers,
-            IEnumerable<EventMessage> events)
+            Dictionary<string, object> headers,
+            EventMessage[] events)
             : this(Bucket.Default, streamId, streamRevision, commitId, commitSequence, commitStamp, headers, events)
-        {}
+        { }
 
         /// <summary>
         ///     Initializes a new instance of the Commit class.
@@ -76,10 +78,9 @@ namespace NEventStore
             Guid commitId,
             int commitSequence,
             DateTime commitStamp,
-            IDictionary<string, object> headers,
-            IEnumerable<EventMessage> events)
+            Dictionary<string, object> headers,
+            EventMessage[] events)
         {
-            //TODO write tests for these?
             Guard.NotNullOrWhiteSpace(() => bucketId, bucketId);
             Guard.NotNullOrWhiteSpace(() => streamId, streamId);
             Guard.NotLessThanOrEqualTo(() => streamRevision, streamRevision, 0);
@@ -95,9 +96,10 @@ namespace NEventStore
             _commitSequence = commitSequence;
             _commitStamp = commitStamp;
             _headers = headers ?? new Dictionary<string, object>();
-            _events = events == null ?
-                new ReadOnlyCollection<EventMessage>(new List<EventMessage>()) :
-                new ReadOnlyCollection<EventMessage>(events.ToList());
+            _events = events ?? new EventMessage[0];
+            //_events = events == null ?
+            //    EmptyReadOnlyCollection :
+            //    new ReadOnlyCollection<EventMessage>(events is IList<EventMessage> list ? list : events.ToList());
         }
 
         /// <summary>
@@ -151,7 +153,7 @@ namespace NEventStore
         /// <summary>
         ///     Gets the metadata which provides additional, unstructured information about this commit.
         /// </summary>
-        public IDictionary<string, object> Headers 
+        public Dictionary<string, object> Headers
         {
             get { return _headers; }
         }
@@ -159,7 +161,7 @@ namespace NEventStore
         /// <summary>
         ///     Gets the collection of event messages to be committed as a single unit.
         /// </summary>
-        public ICollection<EventMessage> Events
+        public EventMessage[] Events
         {
             get
             {

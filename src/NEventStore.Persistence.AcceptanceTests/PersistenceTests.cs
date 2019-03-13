@@ -36,7 +36,7 @@ namespace NEventStore.Persistence.AcceptanceTests
                 1,
                 DateTime.Now,
                 new Dictionary<string, object> { { "key.1", "value" } },
-                new List<EventMessage> { new EventMessage { Body = new ExtensionMethods.SomeDomainEvent { SomeProperty = "Test" } } });
+                new EventMessage[] { new EventMessage { Body = new ExtensionMethods.SomeDomainEvent { SomeProperty = "Test" } } });
             Persistence.Commit(attempt);
         }
 
@@ -120,7 +120,7 @@ namespace NEventStore.Persistence.AcceptanceTests
         [Fact]
         public void should_correctly_persist_the_events()
         {
-            _persisted.Events.Count.Should().Be(_attempt.Events.Count);
+            _persisted.Events.Count.Should().Be(_attempt.Events.Length);
         }
 
         [Fact]
@@ -325,8 +325,8 @@ namespace NEventStore.Persistence.AcceptanceTests
                 commit.CommitId,
                 commit.CommitSequence,
                 commit.CommitStamp,
-                commit.Headers,
-                commit.Events);
+                commit.Headers.ToDictionary(k => k.Key, v => v.Value),
+                commit.Events.ToArray());
         }
 
         protected override void Because()
@@ -359,8 +359,8 @@ namespace NEventStore.Persistence.AcceptanceTests
                 commit.CommitId,
                 commit.CommitSequence + 1,
                 commit.CommitStamp,
-                commit.Headers,
-                commit.Events
+                commit.Headers.ToDictionary(k => k.Key, v => v.Value),
+                commit.Events.ToArray()
             );
         }
 
@@ -1213,7 +1213,7 @@ namespace NEventStore.Persistence.AcceptanceTests
                 1,
                 DateTime.UtcNow,
                 new Dictionary<string, object>(),
-                new List<EventMessage> { new EventMessage { Body = new string('a', bodyLength) } });
+                new EventMessage[] { new EventMessage { Body = new string('a', bodyLength) } });
             Persistence.Commit(attempt);
 
             ICommit commits = Persistence.GetFrom().Single();

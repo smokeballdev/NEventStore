@@ -44,7 +44,7 @@ namespace NEventStore
                 return null;
             }
 
-            if (Logger.IsVerboseEnabled) Logger.Verbose(Resources.CommittingAttempt, attempt.CommitId, attempt.Events == null ? 0 : attempt.Events.Count);
+            if (Logger.IsVerboseEnabled) Logger.Verbose(Resources.CommittingAttempt, attempt.CommitId, attempt.Events == null ? 0 : attempt.Events.Length);
             ICommit commit = _persistence.Commit(attempt);
 
             foreach (var hook in _pipelineHooks)

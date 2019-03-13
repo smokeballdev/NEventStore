@@ -47,34 +47,34 @@ namespace NEventStore.Persistence.AcceptanceTests
             }
 
             return commits;
-        }   
+        }
 
         public static CommitAttempt BuildAttempt(this string streamId, DateTime? now = null, string bucketId = null)
         {
             now = now ?? SystemTime.UtcNow;
             bucketId = bucketId ?? Bucket.Default;
 
-            var messages = new List<EventMessage>
+            var messages = new EventMessage[]
             {
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Test"}},
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Test2"}},
             };
 
             return new CommitAttempt(
-                bucketId: bucketId, 
-                streamId: streamId, 
-                streamRevision: 2, 
-                commitId: Guid.NewGuid(), 
-                commitSequence: 1, 
-                commitStamp: now.Value, 
-                headers: new Dictionary<string, object> {{"A header", "A string value"}, {"Another header", 2}}, 
+                bucketId: bucketId,
+                streamId: streamId,
+                streamRevision: 2,
+                commitId: Guid.NewGuid(),
+                commitSequence: 1,
+                commitStamp: now.Value,
+                headers: new Dictionary<string, object> { { "A header", "A string value" }, { "Another header", 2 } },
                 events: messages
             );
         }
 
         public static CommitAttempt BuildNextAttempt(this ICommit commit)
         {
-            var messages = new List<EventMessage>
+            var messages = new EventMessage[]
             {
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Another test"}},
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Another test2"}},
@@ -82,7 +82,7 @@ namespace NEventStore.Persistence.AcceptanceTests
 
             return new CommitAttempt(commit.BucketId,
                 commit.StreamId,
-                commit.StreamRevision + messages.Count,
+                commit.StreamRevision + messages.Length,
                 Guid.NewGuid(),
                 commit.CommitSequence + 1,
                 commit.CommitStamp.AddSeconds(1),
@@ -92,7 +92,7 @@ namespace NEventStore.Persistence.AcceptanceTests
 
         public static CommitAttempt BuildNextAttempt(this CommitAttempt commit)
         {
-            var messages = new List<EventMessage>
+            var messages = new EventMessage[]
             {
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Another test"}},
                 new EventMessage {Body = new SomeDomainEvent {SomeProperty = "Another test2"}},
@@ -118,7 +118,7 @@ namespace NEventStore.Persistence.AcceptanceTests
                 Count = 1234,
                 Created = new DateTime(2000, 2, 3, 4, 5, 6, 7).ToUniversalTime(),
                 Value = message.Value + "Hello, World!",
-                Contents = {"a", null, string.Empty, "d"}
+                Contents = { "a", null, string.Empty, "d" }
             };
         }
 
@@ -127,7 +127,7 @@ namespace NEventStore.Persistence.AcceptanceTests
             const int streamRevision = 2;
             const int commitSequence = 2;
             Guid commitId = Guid.NewGuid();
-            var headers = new Dictionary<string, object> {{"Key", "Value"}, {"Key2", (long) 1234}, {"Key3", null}};
+            var headers = new Dictionary<string, object> { { "Key", "Value" }, { "Key2", (long)1234 }, { "Key3", null } };
             var events = new[]
             {
                 new EventMessage
@@ -142,7 +142,7 @@ namespace NEventStore.Persistence.AcceptanceTests
                 }
             };
 
-            return new CommitAttempt(streamId, streamRevision, commitId, commitSequence, SystemTime.UtcNow, headers, events.ToList());
+            return new CommitAttempt(streamId, streamRevision, commitId, commitSequence, SystemTime.UtcNow, headers, events);
         }
 
         [Serializable]
