@@ -14,8 +14,8 @@ Build Status (AppVeyor)
 
 Branches: 
 
-- master [![Build status](https://ci.appveyor.com/api/projects/status/frg36pb2oh1j2ddi/branch/master?svg=true)](https://ci.appveyor.com/project/AGiorgetti/neventstore/branch/master)
-- develop [![Build status](https://ci.appveyor.com/api/projects/status/frg36pb2oh1j2ddi/branch/develop?svg=true)](https://ci.appveyor.com/project/AGiorgetti/neventstore/branch/develop)
+- master [![Build status](https://ci.appveyor.com/api/projects/status/2ve9fl9kuanr6by4/branch/master?svg=true)](https://ci.appveyor.com/project/dlbroadfoot/neventstore/branch/master)
+- develop [![Build status](https://ci.appveyor.com/api/projects/status/2ve9fl9kuanr6by4/branch/develop?svg=true)](https://ci.appveyor.com/project/dlbroadfoot/neventstore/branch/develop)
 
 
 Documentation
