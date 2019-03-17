@@ -49,3 +49,19 @@ test:
     - NEventStore.Serialization.Json.dll
 artifacts:
 - path: '**\artifacts\**\*.*'
+
+deploy:
+  - provider: NuGet
+    server: http://packages.smokeball.com/nuget/smokeball/
+    api_key:
+      secure: Gb5neQyAROVe6WHeeLpjwGG0VPyVX8Oy/3eUUQBLpQA=
+    on:
+      branch: master
+      is_pr: false
+
+  - provider: NuGet
+    server: http://packages.smokeball.com/nuget/smokeball/
+    api_key:
+      secure: Gb5neQyAROVe6WHeeLpjwGG0VPyVX8Oy/3eUUQBLpQA=
+    on:
+      appveyor_repo_tag: true
